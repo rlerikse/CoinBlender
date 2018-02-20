@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
-import Todos from './Todos';
-AppRegistry.registerComponent('CoinBlender', () => Todos);
-AppRegistry.registerComponent('RNFirebaseStarter', () => Todos);
+import App from './App';
+AppRegistry.registerComponent('CoinBlender', () => App);
+AppRegistry.registerComponent('RNFirebaseStarter', () => App);
