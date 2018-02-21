@@ -2,6 +2,9 @@ import React from 'react';
 import firebase from 'react-native-firebase';
 import Todos from './Todos'
 import Login from './Login'
+import Main from './Main'
+import Loading from './Loading'
+import LoginForm from './LoginForm'; //Goes at the top
 import { FlatList, ScrollView, View, Text, TextInput, Button } from 'react-native';
 // Components to display when the user is LoggedIn and LoggedOut
 // Screens for logged in/out - outside the scope of this tutorial
@@ -10,6 +13,7 @@ export default class App extends React.Component {
     super();
     this.state = {
       loading: true,
+      loggedIn: false
     };
   }
   /**
@@ -19,21 +23,16 @@ export default class App extends React.Component {
    * (logged out) or an Object (logged in)
    */
   componentDidMount() {
-    this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
-      this.setState({
-        loading: false,
-        user,
-      });
-    });
+
   }
   /**
    * Don't forget to stop listening for authentication state changes
    * when the component unmounts.
    */
   componentWillUnmount() {
-    this.authSubscription();
+    
   }
   render() {
-    return <Login />;
-  }
+    return <Loading />;
+    }
 }

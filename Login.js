@@ -38,7 +38,7 @@ export default class Login extends React.Component {
   componentWillUnmount() {
     this.authSubscription();
   }
-
+  
   onRegister() {
     const { email, password } = this.state;
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -65,7 +65,10 @@ export default class Login extends React.Component {
       onChangeText={(password) => this.setState({password})}
       />
       <Button
-      title={'Login/Register'}
+      title={'Login'}
+      onPress={() => this.onLogin()}
+      /><Button
+      title={'Register'}
       onPress={() => this.onRegister()}
       />
       </View>);
