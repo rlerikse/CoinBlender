@@ -31,7 +31,7 @@ class LoginForm extends Component {
   }
   render() {
     if (this.state.LoggedIn){
-      return <App />;
+      return <Loading />;
     }
     return (
       <View>
