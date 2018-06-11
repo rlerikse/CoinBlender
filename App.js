@@ -1,38 +1,69 @@
 import React from 'react';
-import firebase from 'react-native-firebase';
-import Todos from './Todos'
-import Login from './Login'
-import Main from './Main'
-import Loading from './Loading'
-import LoginForm from './LoginForm'; //Goes at the top
-import { FlatList, ScrollView, View, Text, TextInput, Button } from 'react-native';
-// Components to display when the user is LoggedIn and LoggedOut
-// Screens for logged in/out - outside the scope of this tutorial
-export default class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      loading: true,
-      loggedIn: false
-    };
-  }
-  /**
-   * When the App component mounts, we listen for any authentication
-   * state changes in Firebase.
-   * Once subscribed, the 'user' parameter will either be null
-   * (logged out) or an Object (logged in)
-   */
-  componentDidMount() {
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import Amplify, { Auth } from 'aws-amplify'
+import config from './aws-exports'
+Amplify.configure(config)
 
+export default class App extends React.Component {
+  state = { // 1
+    authCode: ''
   }
-  /**
-   * Don't forget to stop listening for authentication state changes
-   * when the component unmounts.
-   */
-  componentWillUnmount() {
-    
+  onChangeText(authCode) { // 2
+    this.setState({ authCode })
+  }
+  signUp() {
+    Auth.signUp({ // 3
+      username: 'redg',
+      password: 'Password12@',
+      attributes: {
+        phone_number: '+13136800062',
+        email: 'reggiedillingham@gmail.com'
+      }
+    })
+    .then(res => {
+      console.log('successful signup: ', res)
+    })
+    .catch(err => {
+      console.log('error signing up: ', err)
+    })
+  }
+  confirmUser() { // 4
+    const { authCode } = this.state
+    Auth.confirmSignUp('myCoolUsername', authCode)
+      .then(res => {
+        console.log('successful confirmation: ', res)
+      })
+      .catch(err => {
+        console.log('error confirming user: ', err)
+      })
   }
   render() {
-    return <Loading />;
-    }
+    return (
+      <View style={styles.container}>
+      <Button title='Sign Up' onPress={this.signUp.bind(this)} />
+      <TextInput
+        placeholder='Input Code'
+        onChangeText={value => this.onChangeText(value)}
+        style={styles.input}
+      />
+      <Button
+        title='Confirm User'
+        onPress={this.confirmUser.bind(this)}
+      />
+    </View>
+    );
+  }
 }
+
+const styles = StyleSheet.create({
+  input: {
+    height: 50,
+    backgroundColor: '#ededed',
+    marginVertical: 10
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#F5FCFF'
+  }
+})
